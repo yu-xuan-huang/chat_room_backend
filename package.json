@@ -15,7 +15,7 @@
         "morgan": "~1.9.1",
         "ws": "^8.10.0"
     },
-    "main": "index.js",
+    "main": "server.js",
     "repository": "https://github.com/yu-xuan-huang/chat_room_backend.git",
     "author": "yu-xuan-huang <ga578007@gmail.com>",
     "license": "MIT"
