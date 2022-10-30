@@ -3,7 +3,7 @@
     "version": "0.0.0",
     "private": true,
     "scripts": {
-        "start": "node ./server.js"
+        "start": "node server.js"
     },
     "dependencies": {
         "cookie-parser": "~1.4.4",
@@ -14,5 +14,9 @@
         "moment": "^2.29.4",
         "morgan": "~1.9.1",
         "ws": "^8.10.0"
-    }
+    },
+    "main": "index.js",
+    "repository": "https://github.com/yu-xuan-huang/chat_room_backend.git",
+    "author": "yu-xuan-huang <ga578007@gmail.com>",
+    "license": "MIT"
 }

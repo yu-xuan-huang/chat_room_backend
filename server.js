@@ -2,7 +2,7 @@ var ws = require("nodejs-websocket");
 var moment = require('moment');
 
 console.log("開始連接...")
-
+const port = process.env.PORT || 3000;
 let users = [];
 
 // 向所有连接的客户端广播
@@ -48,5 +48,5 @@ var server = ws.createServer(function (conn) {
     conn.on("error", function (code, reason) {
         console.log("啟動連接")
     });
-}).listen(8001)
+}).listen(port)
 console.log("WebSocket建立完成")
