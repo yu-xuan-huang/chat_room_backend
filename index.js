@@ -1,18 +1,52 @@
-//引用'http'模組
-const http = require('http');
+var ws = require("nodejs-websocket");
+var moment = require('moment');
 
-//設定server網址，因為在本機端測試，所以輸入127.0.0.1
-//const hostname = '127.0.0.1'  //上傳至伺服器需拿掉
-
-//port 號會由 Heroku 給予，因此不再自行指定
+console.log("開始連接...")
 const port = process.env.PORT || 3000;
+let users = [];
 
-//新增一個server並指定他的頁面資訊，內容為'Hello World!'
-const server = http.createServer((req, res) => {
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/plain');
-    res.end('Hello World!\n');
-});
+// 向所有连接的客户端广播
+function boardcast(obj) {
+    server.connections.forEach(function (conn) {
+        conn.sendText(JSON.stringify(obj));
+    })
+}
 
-//監聽得到的 port 號開啟
-server.listen(port, () => console.log(`Listening on ${port}`));
+function getDate() {
+    return moment().format('YYYY-MM-DD HH:mm:ss')
+}
+
+var server = ws.createServer(function (conn) {
+    conn.on("text", function (obj) {
+        obj = JSON.parse(obj);
+        if (obj.type === 1) {
+            users.push({
+                nickname: obj.nickname,
+                uid: obj.uid
+            });
+            boardcast({
+                type: 1,
+                date: getDate(),
+                msg: obj.nickname + '加入聊天室',
+                users: users,
+                uid: obj.uid,
+                nickname: obj.nickname
+            });
+        } else {
+            boardcast({
+                type: 2,
+                date: getDate(),
+                msg: obj.msg,
+                uid: obj.uid,
+                nickname: obj.nickname
+            });
+        }
+    })
+    conn.on("close", function (code, reason) {
+        console.log("關閉連接")
+    });
+    conn.on("error", function (code, reason) {
+        console.log("啟動連接")
+    });
+}).listen(port)
+console.log("WebSocket建立完成")
